@@ -4,8 +4,6 @@
 
 ## 설치
 
-`hf-utils`를 설치하려면 `Poetry`를 사용하여 패키지를 빌드하고 설치할 수 있습니다.
-
 ```sh
 pip install git+https://github.com/KU-HIAI/hf-utils
 ```
