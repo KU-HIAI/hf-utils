@@ -6,17 +6,9 @@
 
 `hf-utils`를 설치하려면 `Poetry`를 사용하여 패키지를 빌드하고 설치할 수 있습니다.
 
-### Poetry로 설치
-
-1. `Poetry`를 사용하여 패키지를 빌드합니다:
-    ```sh
-    poetry build
-    ```
-
-2. 빌드된 패키지를 설치합니다:
-    ```sh
-    pip install dist/hf_utils-0.1.0-py3-none-any.whl
-    ```
+```sh
+pip install git+https://github.com/KU-HIAI/hf-utils
+```
 
 ## 사용법
 
