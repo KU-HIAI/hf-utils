@@ -19,7 +19,7 @@ pip install git+https://github.com/KU-HIAI/hf-utils
 데이터셋을 Huggingface Hub에 업로드합니다.
 
 ```sh
-hf-utils upload_to_hub --repo_id <repo_id> [--is_private] --train_json <train_json_path> [--val_json <val_json_path>] [--test_json <test_json_path>] [--train_test_split_ratio <ratio>]
+hf-utils upload_to_hub --repo_id <repo_id> [--private] --train_json <train_json_path> [--val_json <val_json_path>] [--test_json <test_json_path>] [--train_test_split_ratio <ratio>] [--json_option <json_option>]
 ```
 
 #### update_readme
@@ -43,7 +43,7 @@ hf-utils update_all_datasets_readme --organization <organization_name>
 #### 데이터셋 업로드
 
 ```sh
-hf-utils upload_to_hub --repo_id my_org/my_dataset --is_private --train_json path/to/train.json --val_json path/to/val.json --test_json path/to/test.json --train_test_split_ratio 0.9
+hf-utils upload_to_hub --repo_id my_org/my_dataset --private --train_json path/to/train.json --val_json path/to/val.json --test_json path/to/test.json --train_test_split_ratio 0.9 --json_option auto
 ```
 
 #### README.md 업데이트
@@ -53,7 +53,6 @@ hf-utils update_readme
 ```
 
 #### 조직의 모든 데이터셋 README.md 업데이트
-
 
 ```sh
 hf-utils update_all_datasets_readme --organization my_org

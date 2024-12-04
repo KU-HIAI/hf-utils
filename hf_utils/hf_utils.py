@@ -15,20 +15,32 @@ from sklearn.model_selection import train_test_split
 logger = structlog.get_logger()
 
 class HFUploader:
-    def __init__(self, repo_id=None, is_private=True):
+    def __init__(self, repo_id=None, private=True):
         self.repo_id = repo_id
-        self.is_private = is_private
+        self.private = private
         self.api = HfApi()
 
-    def dataset_upload(self, train_json, val_json=None, test_json=None, train_test_split_ratio=0):
-        with open(train_json) as fp:
-            train_data = [json.loads(line) for line in fp]
+    def dataset_upload(self, train_json, val_json=None, test_json=None, train_test_split_ratio=0, json_option='auto'):
+        def load_json(file_path, json_option):
+            with open(file_path) as fp:
+                if json_option == 'jsonl':
+                    return [json.loads(line) for line in fp]
+                elif json_option == 'json':
+                    return json.load(fp)
+                elif json_option == 'auto':
+                    try:
+                        return [json.loads(line) for line in fp]
+                    except json.JSONDecodeError:
+                        fp.seek(0)
+                        return json.load(fp)
+                else:
+                    raise ValueError(f"Unsupported json_option: {json_option}")
 
+        train_data = load_json(train_json, json_option)
         dataset_dict = {'train': Dataset.from_list(train_data)}
 
         if val_json:
-            with open(val_json) as fp:
-                val_data = [json.loads(line) for line in fp]
+            val_data = load_json(val_json, json_option)
             dataset_dict['validation'] = Dataset.from_list(val_data)
         elif train_test_split_ratio > 0:
             train_data, val_data = train_test_split(train_data, test_size=1-train_test_split_ratio, random_state=42)
@@ -38,13 +50,12 @@ class HFUploader:
             }
 
         if test_json:
-            with open(test_json) as fp:
-                test_data = [json.loads(line) for line in fp]
+            test_data = load_json(test_json, json_option)
             dataset_dict['test'] = Dataset.from_list(test_data)
 
         dataset = DatasetDict(dataset_dict)
 
-        self.api.create_repo(self.repo_id, private=self.is_private, repo_type='dataset', exist_ok=True)
+        self.api.create_repo(self.repo_id, private=self.private, repo_type='dataset', exist_ok=True)
         dataset.push_to_hub(self.repo_id, commit_message='Initial commit')
         
         # 데이터셋 업로드 후 README 업데이트
