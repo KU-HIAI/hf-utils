@@ -148,7 +148,7 @@ class HFUploader:
         for dataset in datasets:
             try:
                 self.repo_id = dataset.id
-                self.update_readme()
+                self.update_dataset_readme()
             except Exception as ex:
                 logger.error("Error updating README", repo_id=self.repo_id, error=ex)
                 logger.error(traceback.print_exc())
